@@ -77,3 +77,14 @@ func TestDatabaseRendering(t *testing.T) {
 		})
 	}
 }
+
+// CI lints the chart without extra values, so the defaults must pass the schema.
+func TestDefaultValuesLint(t *testing.T) {
+	helm, err := exec.LookPath("helm")
+	if err != nil {
+		t.Skip("helm is required for chart lint tests")
+	}
+	if out, err := exec.CommandContext(t.Context(), helm, "lint", "helm").CombinedOutput(); err != nil {
+		t.Fatalf("helm lint with default values failed: %s", out)
+	}
+}
